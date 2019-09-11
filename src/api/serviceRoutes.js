@@ -2,7 +2,7 @@ import axios from 'axios';
 import headerFunction from "@/api/headersFunction.js";
 import store from '@/store.js/'
 //Main Url for Swagger
-const url = "http://calendar-project-calendar-project.apps.us-east-1.online-starter.openshift.com/api/v1";
+const url = "http://calendar-backend-calendar-dev.apps.ocp-dev.agilesof.com/api/v1";
 
 const getTimeOffUrl = "/request/all_sorted/approved";
 const getAdminListUrl = "/supervisor/all/";
@@ -16,6 +16,7 @@ const postForTokenUrl = "/token/";
 const postSubmitRequestUrl = "/request/create/";
 const putEditRequestUrl = "/request/edit/";
 const putUpdateStatusUrl = "/request/updatestatus/";
+const postUserForgotPasswordUrl = "/user/forgot_password/";
 const deleteRequestUrl = "/request/";
 
 export default {
@@ -45,13 +46,13 @@ export default {
         return res;
     },
     getUserRequests() {
-        const res = axios.get(url + getUserRequestsUrl + store.state.username, {
+        const res = axios.get(url + getUserRequestsUrl, {
             headers: headerFunction.getHeaders()
         });
         return res;
     },
-    postAdmin(data) {
-        const res = axios.post(url + postAdminUrl, data, {
+    postAdmin(username, data) {
+        const res = axios.put(url + postAdminUrl + username, data, {
             headers: headerFunction.getHeaders()
         });
         return res
@@ -82,6 +83,12 @@ export default {
     },
     postSubmitRequest(data) {
         const res = axios.post(url + postSubmitRequestUrl, data, {
+            headers: headerFunction.getHeaders()
+        });
+        return res
+    },
+    postUserForgotPassword(data) {
+        const res = axios.post(url + postUserForgotPasswordUrl, data, {
             headers: headerFunction.getHeaders()
         });
         return res

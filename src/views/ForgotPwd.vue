@@ -31,7 +31,7 @@
 
 <script>
 import EventBus from "@/assets/models/eventBus";
-import axios from "axios";
+import api from "@/api/serviceRoutes.js";
 
 export default {
   name: "ForgotPwd",
@@ -60,22 +60,17 @@ export default {
       let userEmail = {
         username: this.email
       };
-      axios
-        .post(
-          "http://calendar-project-calendar-project.apps.us-east-1.online-starter.openshift.com/api/v1/user/forgot_password/",
-          userEmail
-        )
-        .then(() => {
-          this.$vs.notify({
-            color: "primary",
-            position: "top-center",
-            icon: "mail",
-            time: 4000,
-            title: "Email Cofirmation",
-            text: "An email has been sent to the supplied email address."
-          });
-          this.isActive = false;
+      api.postUserForgotPassword(userEmail).then(() => {
+        this.$vs.notify({
+          color: "primary",
+          position: "top-center",
+          icon: "mail",
+          time: 4000,
+          title: "Email Cofirmation",
+          text: "An email has been sent to the supplied email address."
         });
+        this.isActive = false;
+      });
     }
   }
 };

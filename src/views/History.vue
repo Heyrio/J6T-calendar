@@ -53,7 +53,10 @@
                 <span>{{props.row.date_end | formatDate('shortDateNumeric')}}</span>
               </b-table-column>
               <b-table-column field="time" width="175" label="Request Time">
-                <span>{{props.row.date_start | formatDate('Time')}} - {{props.row.date_end | formatDate('Time')}}</span>
+                <span v-if="isAllDay(props.row.date_start, props.row.date_end)">All Day</span>
+                <span
+                  v-else
+                >{{props.row.date_start | formatDate('Time')}} - {{props.row.date_end | formatDate('Time')}}</span>
               </b-table-column>
               <b-table-column field="reason" label="Reason" sortable>
                 <a @click="openReasonModal(props.row.notes)">{{ props.row.reason }}</a>
@@ -126,9 +129,11 @@ import serviceApi from "@/api/serviceRoutes.js";
 import api from "@/api/serviceRoutes.js";
 import RequestOffModal from "@/views/RequestOffModal.vue";
 import EventBus from "@/assets/models/eventBus";
+import dateHelper from "@/assets/mixin.js";
 
 export default {
   name: "History",
+  mixins: [dateHelper],
   components: {
     RequestOffModal
   },
@@ -179,12 +184,20 @@ export default {
     }
   },
   methods: {
+    isAllDay(start, end) {
+      if (
+        this.formatDateMixin(start, "Time") == "12:00 PM" &&
+        this.formatDateMixin(end, "Time") == "12:00 PM"
+      ) {
+        return true;
+      }
+    },
     closeRequestModal() {
       this.editRequestOpen = false;
     },
     loadUserRequest() {
       api
-        .getUserRequests() 
+        .getUserRequests()
         .then(response => {
           this.requests = response.data.requests;
         })

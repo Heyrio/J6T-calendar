@@ -18,7 +18,10 @@
           </li>
           <li>
             <strong>Time Off:</strong>
-            {{eventData.timeStart}} - {{eventData.timeEnd}}
+            <span
+              v-if="eventData.timeStart == '12:00 PM'  && eventData.timeEnd == '12:00 PM'"
+            >&nbsp;All day</span>
+            <span v-else>{{eventData.timeStart}} - {{eventData.timeEnd}}</span>
           </li>
           <li>
             <strong>Reason:</strong>

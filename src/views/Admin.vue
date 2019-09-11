@@ -90,12 +90,11 @@ export default {
     },
     adminStatus(user, is) {
       let data = {
-        username: user,
         is_staff: is
       };
       api
-        .postAdmin(data)
-        .then((res) => {
+        .postAdmin(user, data)
+        .then(res => {
           this.loadUsers();
           this.$vs.notify({
             color: "primary",

@@ -116,7 +116,6 @@ export default {
       this.$validator.validate().then(valid => {
         if (valid) {
           let passObj = new NewPassObj();
-          passObj.username = this.myNewPass.myEmail;
           passObj.password = this.myNewPass.myTempPassword;
           passObj.new_password = this.myNewPass.myNewPassword;
           this.isModalActive = false;

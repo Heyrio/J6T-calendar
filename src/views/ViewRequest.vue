@@ -54,8 +54,11 @@
               </b-table-column>
 
               <b-table-column field="time" width="100" label="Request Time">
-                <span>{{props.row.date_start | formatDate('Time')}}-</span>
-                <span>{{props.row.date_end | formatDate('Time')}}</span>
+                <span v-if="isAllDay(props.row.date_start, props.row.date_end)">All Day</span>
+                <span v-else>
+                  <span>{{props.row.date_start | formatDate('Time')}}-</span>
+                  <span>{{props.row.date_end | formatDate('Time')}}</span>
+                </span>
               </b-table-column>
 
               <b-table-column field="reason" label="Reason" sortable>
@@ -116,10 +119,11 @@
 </template>
 
 <script>
-import moment from "moment";
 import api from "@/api/serviceRoutes.js";
+import dateHelper from "@/assets/mixin.js";
 
 export default {
+  mixins: [dateHelper],
   data() {
     return {
       tempD: "2019-08-01T",
@@ -144,16 +148,16 @@ export default {
   mounted() {
     this.loadRequests();
   },
-  computed: {
-    formatDate(value) {
-      let tempVal = "";
-      if (value) {
-        tempVal = moment(String(value)).format("MM/DD/YYYY");
-      }
-      return tempVal;
-    }
-  },
+  computed: {},
   methods: {
+    isAllDay(start, end) {
+      if (
+        this.formatDateMixin(start, "Time") == "12:00 PM" &&
+        this.formatDateMixin(end, "Time") == "12:00 PM"
+      ) {
+        return true;
+      }
+    },
     loadRequests() {
       api
         .getRequestData()
